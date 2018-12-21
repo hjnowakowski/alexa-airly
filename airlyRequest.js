@@ -1,5 +1,6 @@
 const axios = require("axios");
-const config = require("config");
+const config = require("./config.js");
+
 
 module.exports = class AirlyRequest {
   constructor(url, lat, lng) {
@@ -8,10 +9,12 @@ module.exports = class AirlyRequest {
     this.INDEX_TYPE = "AIRLY_CAQI";
     this.MAX_DISTANCE_KM = 0.5;
     this.AIRLY_MEASUREMENT_API_ENDPOINT = "http://airapi.airly.eu/v2/measurements/nearest";
+    this.apiKey = config.airly.apiKey;
+
 
     this.apiParameters = {
       headers: {
-        'apikey': config.airly.apiKey
+        'apikey': this.apiKey
       },
       params: {
         lat: lat,
