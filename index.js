@@ -35,7 +35,7 @@ const GetNewFactHandler = {
     const speechOutput = GET_FACT_MESSAGE + randomFact;
     const url = `http://numbersapi.com/1`;
 
-    const airlyRequest = new AirlyRequest(url, 50.062006, 19.940984);
+    const airlyRequest = new AirlyRequest(url, 50.2528267, 19.0258353000);
 
     const data = await airlyRequest.getAirlyData();
 
