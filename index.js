@@ -28,23 +28,21 @@ const GetNewFactHandler = {
       (request.type === 'IntentRequest' &&
         request.intent.name === 'GetNewFactIntent');
   },
-  async handle(handlerInput) {
-    const factArr = "lala";
-    const factIndex = Math.floor(Math.random() * factArr.length);
-    const randomFact = factArr[factIndex];
-    const speechOutput = GET_FACT_MESSAGE + randomFact;
-    const url = `http://numbersapi.com/1`;
+  async handle(handlerInput, event) {
+    const airlyRequest = new AirlyRequest(50.252830, 19.025803);
 
-    const airlyRequest = new AirlyRequest(url, 50.2528267, 19.0258353000);
+    // const data = await airlyRequest.getAirlyData();
 
-    const data = await airlyRequest.getAirlyData();
+    const mockData = "mock data"
 
-    console.log(data.current.indexes[0].description);
+    // data.current.indexes[0].description + "the air pollution is equal to: " + data.current.indexes[0].value + '<break time="1s"/>' + data.current.indexes[0].advice
 
-    // Add
+    deviceId = this.event
+
+    console.log(event);
 
     return handlerInput.responseBuilder
-          .speak(data.current.indexes[0].description + "the air pollution is equal to: " + data.current.indexes[0].value + '<break time="1s"/>' + data.current.indexes[0].advice)
+          .speak(mockData)
           .withSimpleCard(SKILL_NAME, randomFact)
           .getResponse();
   },
