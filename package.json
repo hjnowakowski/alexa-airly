@@ -1,7 +1,7 @@
 {
   "name": "airly-alexa",
   "version": "1.0.0",
-  "description": "An Alexa Skill that is capable of providing the air pollution data",
+  "description": "Thanks to Airly API I created and alexa skill that is able to provide the air pollution.",
   "main": "index.js",
   "scripts": {
     "deploy": "./upload.sh",
@@ -17,5 +17,8 @@
     "axios": "=0.18.1",
     "jslint": "^0.12.0",
     "request": "^2.88.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0"
   }
 }

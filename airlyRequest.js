@@ -6,11 +6,8 @@ module.exports = class AirlyRequest {
   constructor(lat, lng) {
     this.lat = lat;
     this.lng = lng;
-    this.response = "null";
     this.AIRLY_MEASUREMENT_API_ENDPOINT = "http://airapi.airly.eu/v2/measurements/nearest";
     this.apiKey = config.airly.apiKey;
-
-
     this.apiParameters = {
       headers: {
         'apikey': this.apiKey
@@ -22,9 +19,13 @@ module.exports = class AirlyRequest {
     }
   }
 
-  async getAirlyData() {
-    console.log(this.apiParameters);
+  async getspeakableAirlyOutput() {
     const response = await axios.get(this.AIRLY_MEASUREMENT_API_ENDPOINT, this.apiParameters);
-    return response.data;
+
+    return response.data.current.indexes[0].description +
+        "the air pollution is equal to: " +
+        response.data.current.indexes[0].value +
+        "<break time=\"1s\"/>" +
+        response.data.current.indexes[0].advice
   }
 };

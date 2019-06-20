@@ -31,24 +31,14 @@ const GetNewFactHandler = {
   async handle(handlerInput, event) {
     const airlyRequest = new AirlyRequest(50.252830, 19.025803);
 
-    // const data = await airlyRequest.getAirlyData();
-
-    const mockData = "mock data"
-
-    // data.current.indexes[0].description + "the air pollution is equal to: " + data.current.indexes[0].value + '<break time="1s"/>' + data.current.indexes[0].advice
-
-    deviceId = this.event
-
-    console.log(event);
+    const speakableAirlyOutput = await airlyRequest.getspeakableAirlyOutput();
 
     return handlerInput.responseBuilder
-          .speak(mockData)
-          .withSimpleCard(SKILL_NAME, randomFact)
+          .speak(speakableAirlyOutput)
+          .withSimpleCard(SKILL_NAME)
           .getResponse();
   },
 };
-
-
 
 const HelpHandler = {
   canHandle(handlerInput) {
