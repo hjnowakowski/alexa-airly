@@ -4,29 +4,16 @@
 const Alexa = require('ask-sdk');
 const AirlyRequest = require("./airlyRequest.js");
 
-const messages = {
-  WELCOME: 'Welcome to the Sample Device Address API Skill!  You can ask for the device address by saying what is my address.  What do you want to ask?',
-  WHAT_DO_YOU_WANT: 'What do you want to ask?',
-  NOTIFY_MISSING_PERMISSIONS: 'Please enable Location permissions in the Amazon Alexa app.',
-  NO_ADDRESS: 'It looks like you don\'t have an address set. You can set your address from the companion app.',
-  ADDRESS_AVAILABLE: 'Here is your full address: ',
-  ERROR: 'Uh Oh. Looks like something went wrong.',
-  LOCATION_FAILURE: 'There was an error with the Device Address API. Please try again.',
-  GOODBYE: 'Bye! Thanks for using the Sample Device Address API Skill!',
-  UNHANDLED: 'This skill doesn\'t support that. Please ask something else.',
-  HELP: 'You can use this skill by asking something like: whats my address?',
-  STOP: 'Bye! Thanks for using the Sample Device Address API Skill!',
-};
-
 const PERMISSIONS = ['read::alexa:device:all:address'];
 
 
-const GetNewFactHandler = {
+const GetWeatherPollutionIntent = {
   canHandle(handlerInput) {
-    const request = handlerInput.requestEnvelope.request;
-    return request.type === 'LaunchRequest' ||
-      (request.type === 'IntentRequest' &&
-        request.intent.name === 'GetNewFactIntent');
+
+    const { request } = handlerInput.requestEnvelope;
+
+    return request.type === 'IntentRequest' && request.intent.name === 'GetWeatherPollutionIntent';
+
   },
   async handle(handlerInput, event) {
     const airlyRequest = new AirlyRequest(50.252830, 19.025803);
@@ -95,7 +82,6 @@ const ErrorHandler = {
 };
 
 const SKILL_NAME = 'Space Facts';
-const GET_FACT_MESSAGE = 'Here\'s your fact: ';
 const HELP_MESSAGE = 'You can say tell me a space fact, or, you can say exit... What can I help you with?';
 const HELP_REPROMPT = 'What can I help you with?';
 const STOP_MESSAGE = 'Goodbye!';
@@ -104,7 +90,7 @@ const skillBuilder = Alexa.SkillBuilders.standard();
 
 exports.handler = skillBuilder
   .addRequestHandlers(
-    GetNewFactHandler,
+      GetWeatherPollutionIntent,
     HelpHandler,
     ExitHandler,
     SessionEndedRequestHandler
