@@ -10,7 +10,7 @@
 
 ## Prerequisites
 
-* ASK CLI provided by Amazon
+* AWS CLI provided by Amazon
 * NPM
 
 ## Install
