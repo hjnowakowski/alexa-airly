@@ -3,9 +3,35 @@
 
 const Alexa = require('ask-sdk');
 const AirlyRequest = require("./airlyRequest.js");
+const GeoLocalization = require("./nominatimRequest")
 
 const PERMISSIONS = ['read::alexa:device:all:address'];
 
+const messages = {
+  WELCOME: 'Welcome to the Sample Device Address API Skill!  You can ask for the device address by saying what is my address.  What do you want to ask?',
+  WHAT_DO_YOU_WANT: 'What do you want to ask?',
+  NOTIFY_MISSING_PERMISSIONS: 'Please enable Location permissions in the Amazon Alexa app.',
+  NO_ADDRESS: 'It looks like you don\'t have an address set. You can set your address from the companion app.',
+  ADDRESS_AVAILABLE: 'Here is your full address: ',
+  ERROR: 'Uh Oh. Looks like something went wrong.',
+  LOCATION_FAILURE: 'There was an error with the Device Address API. Please try again.',
+  GOODBYE: 'Bye! Thanks for using the Sample Device Address API Skill!',
+  UNHANDLED: 'This skill doesn\'t support that. Please ask something else.',
+  HELP: 'You can use this skill by asking something like: whats my address?',
+  STOP: 'Bye! Thanks for using the Sample Device Address API Skill!',
+};
+
+
+const LaunchRequest = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
+  },
+  handle(handlerInput) {
+    return handlerInput.responseBuilder.speak(messages.WELCOME)
+        .reprompt(messages.WHAT_DO_YOU_WANT)
+        .getResponse();
+  },
+};
 
 const GetWeatherPollutionIntent = {
   canHandle(handlerInput) {
@@ -15,15 +41,49 @@ const GetWeatherPollutionIntent = {
     return request.type === 'IntentRequest' && request.intent.name === 'GetWeatherPollutionIntent';
 
   },
-  async handle(handlerInput, event) {
-    const airlyRequest = new AirlyRequest(50.252830, 19.025803);
+  async handle(handlerInput) {
 
-    const speakableAirlyOutput = await airlyRequest.getspeakableAirlyOutput();
+    const { requestEnvelope, serviceClientFactory, responseBuilder } = handlerInput;
 
-    return handlerInput.responseBuilder
-          .speak(speakableAirlyOutput)
-          .withSimpleCard(SKILL_NAME)
+
+    const consentToken = requestEnvelope.context.System.user.permissions
+        && requestEnvelope.context.System.user.permissions.consentToken;
+    if (!consentToken) {
+      return responseBuilder
+          .speak(messages.NOTIFY_MISSING_PERMISSIONS)
+          .withAskForPermissionsConsentCard(PERMISSIONS)
           .getResponse();
+    }
+
+    try {
+      const { deviceId } = requestEnvelope.context.System.device;
+      const deviceAddressServiceClient = serviceClientFactory.getDeviceAddressServiceClient();
+      const address = await deviceAddressServiceClient.getFullAddress(deviceId);
+
+      let response;
+      if (address.addressLine1 === null && address.stateOrRegion === null) {
+        response = responseBuilder.speak(messages.NO_ADDRESS).getResponse();
+      } else {
+        const geoLocalization = await GeoLocalization.getGeoLocation(address);
+
+        const airlyRequest = new AirlyRequest(geoLocalization.lat, geoLocalization.lng);
+
+        const speakableAirlyOutput = await airlyRequest.getspeakableAirlyOutput();
+
+        return handlerInput.responseBuilder
+            .speak(speakableAirlyOutput)
+            .withSimpleCard(SKILL_NAME)
+            .getResponse();
+      }
+      return response;
+    } catch (error) {
+      if (error.name !== 'ServiceError') {
+        console.log(error);
+        const response = responseBuilder.speak(messages.ERROR).getResponse();
+        return response;
+      }
+      throw error;
+    }
   },
 };
 
