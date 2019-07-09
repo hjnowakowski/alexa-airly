@@ -6,7 +6,7 @@
   </a>
 </p>
 
-> Alexa Skill that provides air pollution
+> AWS Lambda function that acts as a backend for Alexa Skill that provides information air pollution. It's based on device's (alexa) location.
 
 ## Prerequisites
 
@@ -22,11 +22,12 @@ npm install
 ## Deploy
 
 ```sh
-rm lambda.zip
+
+rm lambda.zip # if already exist
 
 zip -Xr lambda.zip .
 
-aws lambda update-function-code --function-name <FUNCTION-NAME> --zip-file fileb://lambda.zip;
+aws lambda update-function-code --function-name <FUNCTION-NAME> --zip-file fileb://lambda.zip; # you need to have an account and be logged in
 ```
 
 ## Author
