@@ -6,10 +6,11 @@
   </a>
 </p>
 
-> AWS Lambda function that acts as a backend for Alexa Skill that provides information air pollution. It's based on device's (alexa) location.
+> AWS Lambda function that acts as a backend for Alexa Skill that provides information about air pollution. It's based on current device's (alexa) location.
 
 ## Prerequisites
 
+* AWS account
 * AWS CLI provided by Amazon
 * NPM
 
@@ -18,6 +19,8 @@
 ```sh
 npm install
 ```
+
+In order to upload code you can zip it and then send to AWS via CLI. You can do that with the following commands:
 
 ## Deploy
 
