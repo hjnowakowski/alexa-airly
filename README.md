@@ -13,6 +13,8 @@
 * AWS account
 * AWS CLI provided by Amazon
 * NPM
+* Alexa developer account 
+* Airly API key
 
 ## Install
 
