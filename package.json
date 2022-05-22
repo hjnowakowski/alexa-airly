@@ -14,7 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "ask-sdk": "^2.0.0",
-    "axios": "=0.21.1",
+    "axios": "=0.21.2",
     "jslint": "^0.12.0",
     "request": "^2.88.0"
   },
